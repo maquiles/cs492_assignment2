@@ -33,4 +33,7 @@
 	int fifo_q_push(fifo_queue *, void *);
 	void* fifo_q_pop(fifo_queue *);
 
+	void prepaging_fifo();
+	void demand_fifo();
+
 #endif /*_fifo_*/

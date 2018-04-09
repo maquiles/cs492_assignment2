@@ -4,23 +4,6 @@
 ** 
 */
 
-//Preprocessor
-#ifndef NULL
-    #define NULL ((void*) 0)
-#endif /*NULL*/
-
-#define FALSE 0
-#define TRUE 1
-#define POWER 5
-
-#define FIFO 0
-#define LRU 1
-#define CLOCK 2
-#define PLUS 1
-#define MINUS 0
-
-#define MAIN_MEMORY 512	
-
 //Libraries 
 #include <sys/time.h>
 #include <time.h>
@@ -30,60 +13,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-#include "../lib/my.h"
 #include "FIFO.h"
-//#include "../lib/queue_r.h"
-//#include "../lib/queue_p.h"
-    
-//structs
-typedef int algorithms;
-typedef int bool;
-
-struct timeval tvbegin;
-
-typedef struct s_page{
-    int pagenumber;
-    bool validbid;
-} 	t_page;
-
-typedef struct s_program{
-    int pid;
-    int init_memorylocation;
-    int total_memorylocation;
-    int total_pages;
-    t_page *pagetable;
-    fifo_queue* fifo;
-    //queue_p_t* p;	
-    //queue_c_t* c;	
-} 	t_program;
-
-//global variables
-char *global_plist;
-char *global_ptrace;
-int global_page_size;
-algorithms global_page_alg;
-bool global_page_flag;
-t_program *global_programs;
-int global_page_count;
-int global_program_count;
-int global_pageID;
-
-/*
-int std_input_check(int, char**);
-int std_input_error(int);
-int std_param_check(char*, int);
-void read_file(char*);
-int get_instance_count(char*);
-void init_programs();
-void init_pages(int);
-void run_programs();
-void demand_fifo_replacement();
-void demand_clock_replacement();
-void demand_lru_replacement();
-void prepaging_fifo_replacement();
-void prepaging_clock_replacement();
-void prepaging_lru_replacement();
-*/
+#include "LRU.h"
+#include "CLOCK.h"
+#include "assignment.h"
 
 //function to count the number of programs in a page
 int get_program_count(char* argc){
@@ -136,19 +69,87 @@ void init_programs(){
                     fifo_init(global_programs[i].fifo);
                     break;
                 case LRU:
-                    
+                    global_programs[i].lru = (lru_queue*)x,alloc(sizeof(lru_queue)+1);
+                    lru_init(global_programs[i].lru);
+                    break;
                 case CLOCK:
-                    
+                    global_programs[i].clk = (clock_queue*)xmalloc(sizeof(clock_queue)+1);
+                    clock_init(global_programs[i].clk);
+                    break;
             }
-            //intit_pages();
+            init_pages(i);
          }
     }
     fclose(fd);
 }
 
-int main(int argc, char *argv[]){
-    int i;
+void init_pages(int x){
+    int y;
 
+    for (int i = 0; i < global_programs[x].total_pages; i++){
+        global_programs[x].pagetable[i].pagenumber = global_pageID++;
+        global_programs[x].pagetable[i].validbid = FALSE;
+    }
+
+    if(global_programs[x].init_memorylocation > global_programs[x].total_pages){
+        y = global_programs[x].total_pages;
+    }
+    else{
+        y = global_programs[x].init_memorylocation;
+    }
+
+    for (int j = 0; j < y; j++){
+        gloabl_programs[x].pagetable[j].validbid = TRUE;
+        switch (global_page_alg){
+        case FIFO:
+            fifo_push(global_programs[x].fifo, &global_programs[x].pagetable[j]);
+            break;
+        case LRU:
+            lru_push(global_programs[x].lru, &global_programs[x].pagetable[j], 1);
+            break;
+        case CLOCK:
+            clock_push(global_programs[x].clk, &global_programs[x].pagetable[j]);
+            break;
+        }
+    }
+}
+
+void run_programs(){
+    switch (global_page_alg){
+    case FIFO:
+        switch (global_page_flag){
+        case PLUS:
+            prepaging_fifo();
+            break;
+        case MINUS:
+            demand_fifo();
+            break;
+        }
+        break;
+    case LRU:
+        switch (global_page_flag){
+        case PLUS:
+            prepaging_lru();
+            break;
+        case MINUS:
+            demand_lru();
+            break;
+        }
+        break;
+    case CLOCK:
+        switch (global_page_flag){
+        case PLUS:
+            paging_clock();
+            break;
+        case MINUS:
+            demand_clock();
+            break;
+        }
+        break;
+    }
+}
+
+int main(int argc, char *argv[]){
     if(argc != 6){
         printf("ERROR: not enough parameters");
         return 1;
@@ -157,6 +158,16 @@ int main(int argc, char *argv[]){
     global_pageID = 1;
 
     //initialize programs
-    //init_programs();
+    init_programs();
 
+    for (int i = 0; i < global_program_count; i++){
+        printf("pid: %i \t initML: %i \t totalML: %i \t totalPages: %i \t P#: %i \t Flag: %i \n",\
+            global_programs[i].pid,\
+            global_programs[i].init_memorylocation,\
+            global_programs[i].total_memorylocation,\
+            global_programs[i].total_pages,\
+            global_programs[i].pagetable[global_programs[0].init_memorylocation].pagenumber,\
+            global_programs[i].pagetable[global_programs[0].init_memorylocation].validbid);
+    }
+    runprograms();
 }

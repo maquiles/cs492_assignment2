@@ -16,24 +16,27 @@
 	#include <stdlib.h>
 	#include <unistd.h>
 
-	typedef struct sp_node
+	typedef struct lru_node
 	{
 		int* object;
-		struct sp_node *previous;
-		struct sp_node *next;
+		struct lru_node *previous;
+		struct lru_node *next;
 		int count;
-	} 	p_node;
+	} 	lru_node;
 
-	typedef struct squeue_p_t
+	typedef struct lru_queue
 	{
-		p_node *head;
+		lru_node *head;
 		int size;
-	}	queue_p_t;
+	}	lru_queue;
 
-	int p_init(queue_p_t *);
-	int p_push(queue_p_t *, void *, int);
-	int p_node_update(queue_p_t *, void *);
-	void* p_pop(queue_p_t *);
-	int p_remove(queue_p_t *, void *);
+	int lru_init(lru_queue *);
+	int lru_push(lru_queue *, void *, int);
+	int lru_node_update(lru_queue *, void *);
+	void* lru_pop(lru_queue *);
+	int lru_remove(lru_queue *, void *);
+
+	void prepaging_lru();
+	void demand_lru();
 
 #endif /*_lru_*/
