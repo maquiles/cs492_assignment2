@@ -155,6 +155,8 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
+    //std_param_check() to add parameters to global variables
+
     global_pageID = 1;
 
     //initialize programs
