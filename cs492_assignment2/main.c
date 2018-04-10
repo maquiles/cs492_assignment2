@@ -150,7 +150,7 @@ void run_programs(){
 }
 
 int main(int argc, char *argv[]){
-    if(argc != 6){
+    if(argc != 5){
         printf("ERROR: not enough parameters");
         return 1;
     }
