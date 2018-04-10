@@ -5,7 +5,7 @@
 */
 
 #include "CLOCK.h"
-#inclde "assignment.h"
+#include "assignment.h"
 
 int clock_init(clock_queue* q){
     q->size = 0;
@@ -13,7 +13,7 @@ int clock_init(clock_queue* q){
     return 0;
 }
 
-int clock_node_update(clock_queue *c, void *obj){
+int clock_node_update(clock_queue *q, void *obj){
     clock_node *node;
     node = q->head;
 
@@ -26,7 +26,7 @@ int clock_node_update(clock_queue *c, void *obj){
     }
 
     node->r = 1;
-    q->head = node_>next;
+    q->head = node->next;
     return 0;
 }
 
@@ -41,11 +41,11 @@ void* clock_pop(clock_queue* q){
 
     curr = q->head;
 
-    while (curr->r != 0 && curr->next != curr->head){
+    while (curr->r != 0 && curr->next != curr->head){ // clock_node doesnt have a field named head
         curr = curr->next;
     }
 
-    if(curr->next == q->head;){
+    if(curr->next == q->head){
         curr = q->head;
         do{
             curr->r = 0;
@@ -92,7 +92,7 @@ int clock_push(clock_queue* q, void* obj){
         q->head = node->next;
     }
     
-    c->size++;
+    q->size++;
     return 0;
 }
 
@@ -118,11 +118,11 @@ void prepaging_clock(){
         }
 
 		if(global_programs[k].pagetable[j].validbid == FALSE){
-			pop = clock_pop(global_programs[k].clock);
+			pop = clock_pop(global_programs[k].clk);
 			pop->validbid = 0;
 			global_programs[k].pagetable[j].validbid = 1;
 		
-			clock_push(global_programs[k].clock, &(global_programs[k].pagetable[j]));  
+			clock_push(global_programs[k].clk, &(global_programs[k].pagetable[j]));  
 			
 			//find second page for pre_load
 			while (global_programs[k].pagetable[++j].validbid == 1 && j == global_programs[k].total_pages){
@@ -130,14 +130,14 @@ void prepaging_clock(){
 					j = -1;
                 }
 			}
-			pop = clock_pop(global_programs[k].clock);
+			pop = clock_pop(global_programs[k].clk);
 			pop->validbid = 0;
 			global_programs[k].pagetable[j].validbid = 1;
-			clock_push(global_programs[k].clock, &(global_programs[k].pagetable[j])); 
+			clock_push(global_programs[k].clk, &(global_programs[k].pagetable[j])); 
 			pageFault++;			
 		}
         else{
-			clock_node_update(global_programs[k].clock, &(global_programs[k].pagetable[j]));
+			clock_node_update(global_programs[k].clk, &(global_programs[k].pagetable[j]));
 		}	
 		count++;
 	}
@@ -167,14 +167,14 @@ void demand_clock(){
         }
         
 		if (global_programs[k].pagetable[j].validbid == FALSE){
-			pop = clock_pop(global_programs[k].clock);
+			pop = clock_pop(global_programs[k].clk);
 			pop->validbid = 0;
 			global_programs[k].pagetable[j].validbid = 1;
-			clock_push(global_programs[k].clock, &(global_programs[k].pagetable[j]));  
+			clock_push(global_programs[k].clk, &(global_programs[k].pagetable[j]));  
 			pageFault++;
 		}
         else{
-			clock_node_update(global_programs[k].clock, &(global_programs[k].pagetable[j]));			
+			clock_node_update(global_programs[k].clk, &(global_programs[k].pagetable[j]));			
 		}	
 		count++;
 	}

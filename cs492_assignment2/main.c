@@ -49,14 +49,14 @@ void init_programs(){
     }
 
     for (int i = 0; i < global_program_count; i++){
-        if(fscan(fd, "%i %i", &global_programs[i].pid, &global_programs.total_memorylocation) != 2){
-            printf("WARNING: empty line in plist");
+        if(fscan(fd, "%i %i", &global_programs[i].pid, &global_programs[i].total_memorylocation) != 2){ // error with &global_programs, should it have [i]?
+            printf("WARNING: empty line in plist");                                                  // might also have to move total_memorylocation out of the global_programs struct
         }
         else{
             global_programs[i].init_memorylocation = global_page_count / (global_program_count -1);
             global_programs[i].total_pages = global_programs[i].total_memorylocation / global_page_size;
 
-            if(global_programs[i].total_pages * global_page_size < global_programs.total_memorylocation){
+            if(global_programs[i].total_pages * global_page_size < global_programs[i].total_memorylocation){
                 global_programs[i].total_pages++;
             }
 
@@ -69,7 +69,7 @@ void init_programs(){
                     fifo_init(global_programs[i].fifo);
                     break;
                 case LRU:
-                    global_programs[i].lru = (lru_queue*)x,alloc(sizeof(lru_queue)+1);
+                    global_programs[i].lru = (lru_queue*)xmalloc(sizeof(lru_queue)+1);
                     lru_init(global_programs[i].lru);
                     break;
                 case CLOCK:
@@ -99,7 +99,7 @@ void init_pages(int x){
     }
 
     for (int j = 0; j < y; j++){
-        gloabl_programs[x].pagetable[j].validbid = TRUE;
+        global_programs[x].pagetable[j].validbid = TRUE;
         switch (global_page_alg){
         case FIFO:
             fifo_push(global_programs[x].fifo, &global_programs[x].pagetable[j]);
