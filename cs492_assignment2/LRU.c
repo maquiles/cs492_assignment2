@@ -42,7 +42,7 @@ void* lru_pop(lru_queue* q){
     node = q->head;
     obj = node->object;
 
-    if(q->size-- = 1){
+    if(q->size-- == 1){
         q->head = NULL;
     }
     else{
@@ -119,7 +119,7 @@ int lru_remove(lru_queue *q, void *obj){
     curr = q->head;
     node = q->head;
 
-    if(q->size-- = 1){
+    if(q->size-- == 1){
         q->head = NULL;
     }
     else{

@@ -21,7 +21,7 @@
 		void* object;
 		struct fifo_q_node *previous;
 		struct fifo_q_node *next;
-	} 	fifo_node;
+	} 	fifo_q_node;
 
 	typedef struct fifo_queue
 	{

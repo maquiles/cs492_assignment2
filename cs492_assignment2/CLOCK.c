@@ -41,7 +41,8 @@ void* clock_pop(clock_queue* q){
 
     curr = q->head;
 
-    while (curr->r != 0 && curr->next != curr->head){ // clock_node doesnt have a field named head
+    while (curr->r != 0 && curr->next != q->head){ // TODO - is q->head correct? (Originally curr->head, but clock_node struct has no head)
+                                                    // checking that curr->next != q->head seems uneccessary, unless LL is circular?
         curr = curr->next;
     }
 

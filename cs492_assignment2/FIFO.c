@@ -15,7 +15,7 @@ int fifp_q_init(fifo_queue* q){
 
 void* fifo_q_pop(fifo_queue* q){
     void *obj;
-    fifo_node *node;
+    fifo_q_node *node;
 
     if(q == NULL){
         return NULL;
@@ -31,17 +31,17 @@ void* fifo_q_pop(fifo_queue* q){
         q->head->previous = node->previous;
         node->previous->next = q->head;
     }
-    return (void*)object;
+    return (void*)obj;
 }
 
 int fifo_q_push(fifo_queue* q, void* obj){
-    fifo_node* node;
+    fifo_q_node* node;
 
     if(q == NULL || obj == NULL){
         return -1;
     }
 
-    node = (fifo_node*)xmalloc(sizeof(fifo_node));
+    node = (fifo_q_node*)xmalloc(sizeof(fifo_q_node));
     node->object = obj;
 
     if(q->size < 1){
@@ -140,7 +140,7 @@ void demand_fifo(){
         else{
             //la di da
         }
-        count++
+        count++;
     }
     printf("Alg: %i \tPaging: %i \tPage Sz: %i \tTot.Rec.: %u \tPgFault: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
     fclose(fd);
