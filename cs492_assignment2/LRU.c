@@ -62,7 +62,7 @@ int lru_push(lru_queue* q, void* obj, int priority){
         return -1;
     }
 
-    node = (lru_node*)xmalloc(sizeof(lru_node));
+    node = (lru_node*)malloc(sizeof(lru_node));
     node->object = obj;
     node->count = priority;
     curr = q->head;

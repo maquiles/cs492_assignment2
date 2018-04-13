@@ -76,7 +76,7 @@ int clock_push(clock_queue* q, void* obj){
         return -1;
     }
 
-    node = (clock_node*)xmalloc(sizeof(clock_node)+1);
+    node = (clock_node*)malloc(sizeof(clock_node)+1);
     node->object = (void*)obj;
     node->r = 1;
 

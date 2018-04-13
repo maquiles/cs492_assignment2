@@ -41,7 +41,7 @@ int fifo_q_push(fifo_queue* q, void* obj){
         return -1;
     }
 
-    node = (fifo_q_node*)xmalloc(sizeof(fifo_q_node));
+    node = (fifo_q_node*)malloc(sizeof(fifo_q_node));
     node->object = obj;
 
     if(q->size < 1){
@@ -75,7 +75,7 @@ void prepaging_fifo(){
         printf("ERROR: could not read from file");
     }
 
-    while (fscan(fd, "%i %i", &k, &j) == 2){
+    while (fscanf(fd, "%i %i", &k, &j) == 2){
         j /= global_page_size;
 
         if(j == global_programs[k].total_pages){
@@ -83,10 +83,10 @@ void prepaging_fifo(){
         }
 
         if(global_programs[k].pagetable[j].validbid == FALSE){
-            pop = fifo_pop(global_programs[k].fifo);
+            pop = fifo_q_pop(global_programs[k].fifo);
             pop->validbid = 0;
             global_programs[k].pagetable[j].validbid = 1;
-            fifo_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
+            fifo_q_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
 
             while (global_programs[k].pagetable[++j].validbid == 1 && j == global_programs[k].total_pages){
                 if(j == global_programs[k].total_pages){
@@ -94,10 +94,10 @@ void prepaging_fifo(){
                 }
             }
 
-            pop = fifo_pop(global_programs[k].fifo);
+            pop = fifo_q_pop(global_programs[k].fifo);
             pop->validbid = 0;
             global_programs[k].pagetable[j].validbid = 1;
-            fifo_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
+            fifo_q_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
             pageFault++;
         }
         else{
@@ -131,10 +131,10 @@ void demand_fifo(){
         }
 
         if(global_programs[k].pagetable[j].validbid == FALSE){
-            pop = fifo_pop(global_programs[k].fifo);
+            pop = fifo_q_pop(global_programs[k].fifo);
             pop->validbid = 0;
             global_programs[k].pagetable[j].validbid = 1;
-            fifo_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
+            fifo_q_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
             pageFault++;
         }
         else{
