@@ -1,5 +1,5 @@
 NAME=Assignment2exec
-SRC=main.c
+SRC=main.c CLOCK.c FIFO.c LRU.c
 SRCPATH=./
 OBJ=$(addprefix $(SRCPATH), $(SRC: .c=.o))
 
