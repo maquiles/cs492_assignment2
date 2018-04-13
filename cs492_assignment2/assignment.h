@@ -9,6 +9,10 @@
     #define NULL ((void*) 0)
 #endif /*NULL*/
 
+#include "FIFO.h"
+#include "LRU.h"
+#include "CLOCK.h"
+
 #define FALSE 0
 #define TRUE 1
 #define POWER 5

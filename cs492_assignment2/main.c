@@ -56,7 +56,7 @@ void init_pages(int x){
         global_programs[x].pagetable[j].validbid = TRUE;
         switch (global_page_alg){
         case FIFO:
-            fifo_q_push(global_programs[x].fifo, &global_programs[x].pagetable[j]);
+            fifo_push(global_programs[x].fifo, &global_programs[x].pagetable[j]);
             break;
         case LRU:
             lru_push(global_programs[x].lru, &global_programs[x].pagetable[j], 1);
@@ -97,7 +97,7 @@ void init_programs(){
             switch (global_page_alg){
                 case FIFO:
                     global_programs[i].fifo = (fifo_queue*)malloc(sizeof(fifo_queue)+1);
-                    fifo_q_init(global_programs[i].fifo);
+                    fifo_init(global_programs[i].fifo);
                     break;
                 case LRU:
                     global_programs[i].lru = (lru_queue*)malloc(sizeof(lru_queue)+1);

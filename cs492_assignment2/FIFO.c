@@ -7,15 +7,15 @@
 #include "FIFO.h"
 #include "assignment.h"
 
-int fifp_q_init(fifo_queue* q){
+int fifo_init(fifo_queue* q){
     q->size = 0;
     q->head = NULL;
     return 0;
 }
 
-void* fifo_q_pop(fifo_queue* q){
+void* fifo_pop(fifo_queue* q){
     void *obj;
-    fifo_q_node *node;
+    fifo_node *node;
 
     if(q == NULL){
         return NULL;
@@ -34,14 +34,14 @@ void* fifo_q_pop(fifo_queue* q){
     return (void*)obj;
 }
 
-int fifo_q_push(fifo_queue* q, void* obj){
-    fifo_q_node* node;
+int fifo_push(fifo_queue* q, void* obj){
+    fifo_node* node;
 
     if(q == NULL || obj == NULL){
         return -1;
     }
 
-    node = (fifo_q_node*)malloc(sizeof(fifo_q_node));
+    node = (fifo_node*)malloc(sizeof(fifo_node));
     node->object = obj;
 
     if(q->size < 1){
@@ -83,10 +83,10 @@ void prepaging_fifo(){
         }
 
         if(global_programs[k].pagetable[j].validbid == FALSE){
-            pop = fifo_q_pop(global_programs[k].fifo);
+            pop = fifo_pop(global_programs[k].fifo);
             pop->validbid = 0;
             global_programs[k].pagetable[j].validbid = 1;
-            fifo_q_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
+            fifo_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
 
             while (global_programs[k].pagetable[++j].validbid == 1 && j == global_programs[k].total_pages){
                 if(j == global_programs[k].total_pages){
@@ -94,10 +94,10 @@ void prepaging_fifo(){
                 }
             }
 
-            pop = fifo_q_pop(global_programs[k].fifo);
+            pop = fifo_pop(global_programs[k].fifo);
             pop->validbid = 0;
             global_programs[k].pagetable[j].validbid = 1;
-            fifo_q_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
+            fifo_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
             pageFault++;
         }
         else{
@@ -131,10 +131,10 @@ void demand_fifo(){
         }
 
         if(global_programs[k].pagetable[j].validbid == FALSE){
-            pop = fifo_q_pop(global_programs[k].fifo);
+            pop = fifo_pop(global_programs[k].fifo);
             pop->validbid = 0;
             global_programs[k].pagetable[j].validbid = 1;
-            fifo_q_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
+            fifo_push(global_programs[k].fifo, &(global_programs[k].pagetable[j]));
             pageFault++;
         }
         else{

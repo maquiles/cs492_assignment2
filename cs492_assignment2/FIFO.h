@@ -16,22 +16,22 @@
 	#include <stdlib.h>
 	#include <unistd.h>
 
-	typedef struct fifo_q_node
+	typedef struct fifo_node
 	{
 		void* object;
-		struct fifo_q_node *previous;
-		struct fifo_q_node *next;
-	} 	fifo_q_node;
+		struct fifo_node *previous;
+		struct fifo_node *next;
+	} 	fifo_node;
 
 	typedef struct fifo_queue
 	{
-		fifo_q_node *head;
+		fifo_node *head;
 		int size;
 	}	fifo_queue;
 
-	int fifo_q_init(fifo_queue *);
-	int fifo_q_push(fifo_queue *, void *);
-	void* fifo_q_pop(fifo_queue *);
+	int fifo_init(fifo_queue *);
+	int fifo_push(fifo_queue *, void *);
+	void* fifo_pop(fifo_queue *);
 
 	void prepaging_fifo();
 	void demand_fifo();

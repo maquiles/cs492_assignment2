@@ -71,7 +71,7 @@ int lru_push(lru_queue* q, void* obj, int priority){
         tail = curr->previous;
     }
     
-    if(curr = NULL){
+    if(curr == NULL){
         node->previous = node;
         node->next = node;
         q->head = node;
