@@ -27,60 +27,14 @@ int get_program_count(char* argc){
     if(fd == NULL){
         printf("ERROR: file could not be opened");
     }
-    while ((ch = fget(fd)) != EOF){
-        if(ch == "\n"){
+    while ((ch = fgetc(fd)) != EOF){
+        if(ch == '\n'){
             count++;
         }
     }
 
     fclose(fd);
     return count;
-}
-
-void init_programs(){
-    FILE *fd;
-    global_page_count = MAIN_MEMORY / global_page_size;
-    global_program_count = get_program_count(global_plist);
-    global_programs = (t_program*)xmalloc(sizeof(t_program) * global_program_count);
-
-    fd = fopen(global_plist, "r");
-    if(fd == NULL){
-        printf("ERROR: file could not be opened");
-    }
-
-    for (int i = 0; i < global_program_count; i++){
-        if(fscan(fd, "%i %i", &global_programs[i].pid, &global_programs[i].total_memorylocation) != 2){ // error with &global_programs, should it have [i]?
-            printf("WARNING: empty line in plist");                                                  // might also have to move total_memorylocation out of the global_programs struct
-        }
-        else{
-            global_programs[i].init_memorylocation = global_page_count / (global_program_count -1);
-            global_programs[i].total_pages = global_programs[i].total_memorylocation / global_page_size;
-
-            if(global_programs[i].total_pages * global_page_size < global_programs[i].total_memorylocation){
-                global_programs[i].total_pages++;
-            }
-
-            global_page_count -= global_programs[i].init_memorylocation;
-            global_programs[i].pagetable = (t_page*)xmalloc(sizeof(t_page) * global_programs[i].total_pages);
-
-            switch (global_page_alg){
-                case FIFO:
-                    global_programs[i].fifo = (fifo_queue*)xmalloc(sizeof(fifo_queue)+1);
-                    fifo_init(global_programs[i].fifo);
-                    break;
-                case LRU:
-                    global_programs[i].lru = (lru_queue*)xmalloc(sizeof(lru_queue)+1);
-                    lru_init(global_programs[i].lru);
-                    break;
-                case CLOCK:
-                    global_programs[i].clk = (clock_queue*)xmalloc(sizeof(clock_queue)+1);
-                    clock_init(global_programs[i].clk);
-                    break;
-            }
-            init_pages(i);
-         }
-    }
-    fclose(fd);
 }
 
 void init_pages(int x){
@@ -102,7 +56,7 @@ void init_pages(int x){
         global_programs[x].pagetable[j].validbid = TRUE;
         switch (global_page_alg){
         case FIFO:
-            fifo_push(global_programs[x].fifo, &global_programs[x].pagetable[j]);
+            fifo_q_push(global_programs[x].fifo, &global_programs[x].pagetable[j]);
             break;
         case LRU:
             lru_push(global_programs[x].lru, &global_programs[x].pagetable[j], 1);
@@ -112,6 +66,52 @@ void init_pages(int x){
             break;
         }
     }
+}
+
+void init_programs(){
+    FILE *fd;
+    global_page_count = MAIN_MEMORY / global_page_size;
+    global_program_count = get_program_count(global_plist);
+    global_programs = (t_program*)malloc(sizeof(t_program) * global_program_count);
+
+    fd = fopen(global_plist, "r");
+    if(fd == NULL){
+        printf("ERROR: file could not be opened");
+    }
+
+    for (int i = 0; i < global_program_count; i++){
+        if(fscanf(fd, "%i %i", &global_programs[i].pid, &global_programs[i].total_memorylocation) != 2){ // error with &global_programs, should it have [i]?
+            printf("WARNING: empty line in plist");                                                  // might also have to move total_memorylocation out of the global_programs struct
+        }
+        else{
+            global_programs[i].init_memorylocation = global_page_count / (global_program_count -1);
+            global_programs[i].total_pages = global_programs[i].total_memorylocation / global_page_size;
+
+            if(global_programs[i].total_pages * global_page_size < global_programs[i].total_memorylocation){
+                global_programs[i].total_pages++;
+            }
+
+            global_page_count -= global_programs[i].init_memorylocation;
+            global_programs[i].pagetable = (t_page*)malloc(sizeof(t_page) * global_programs[i].total_pages);
+
+            switch (global_page_alg){
+                case FIFO:
+                    global_programs[i].fifo = (fifo_queue*)malloc(sizeof(fifo_queue)+1);
+                    fifo_q_init(global_programs[i].fifo);
+                    break;
+                case LRU:
+                    global_programs[i].lru = (lru_queue*)malloc(sizeof(lru_queue)+1);
+                    lru_init(global_programs[i].lru);
+                    break;
+                case CLOCK:
+                    global_programs[i].clk = (clock_queue*)malloc(sizeof(clock_queue)+1);
+                    clock_init(global_programs[i].clk);
+                    break;
+            }
+            init_pages(i);
+         }
+    }
+    fclose(fd);
 }
 
 void run_programs(){
@@ -139,7 +139,7 @@ void run_programs(){
     case CLOCK:
         switch (global_page_flag){
         case PLUS:
-            paging_clock();
+            prepaging_clock();
             break;
         case MINUS:
             demand_clock();
@@ -171,5 +171,5 @@ int main(int argc, char *argv[]){
             global_programs[i].pagetable[global_programs[0].init_memorylocation].pagenumber,\
             global_programs[i].pagetable[global_programs[0].init_memorylocation].validbid);
     }
-    runprograms();
+    run_programs();
 }
