@@ -186,9 +186,20 @@ int main(int argc, char *argv[]){
         printf("Improper flag indicated\n");
         exit;
     }
-    // How to initialize?
-    global_plist = argv[1];
-    global_ptrace = argv[2];
+
+    char* ch = argv[1];
+    global_plist = (char*)malloc(sizeof(char)*(strlen(ch)+2));
+    global_plist[0] = '.';
+    global_plist[1] = '/';
+    strcpy(global_plist+2, ch);
+
+    ch = argv[2];
+    global_ptrace = (char*)malloc(sizeof(char)*(strlen(ch)+7));
+    global_ptrace[0] = '.';
+    global_ptrace[1] = '/';
+    strcpy(global_ptrace+2, ch);
+
+    printf("%s\n%s\n", global_plist, global_ptrace);
 
     //initialize programs
     printf("Initializing programs...\n");
