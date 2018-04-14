@@ -87,7 +87,7 @@ void init_programs(){
 
     for (int i = 0; i < global_program_count; i++){
         if(fscanf(fd, "%i %i", &global_programs[i].pid, &global_programs[i].total_memorylocation) != 2){ // error with &global_programs, should it have [i]?
-            printf("WARNING: empty line in plist");                                                  // might also have to move total_memorylocation out of the global_programs struct
+            printf("WARNING: empty line in plist\n");                                                  // might also have to move total_memorylocation out of the global_programs struct
         }
         else{
             global_programs[i].init_memorylocation = global_page_count / (global_program_count -1);
