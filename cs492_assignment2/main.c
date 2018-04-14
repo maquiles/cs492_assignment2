@@ -21,7 +21,6 @@
 
 //function to count the number of programs in a page
 int get_program_count(char* argc){
-    printf("Getting program count...\n");
     int count = 0;
     char ch;
     FILE *fd;
@@ -33,7 +32,6 @@ int get_program_count(char* argc){
     while ((ch = fgetc(fd)) != EOF){
         if(ch == '\n'){
             count++;
-            printf("%d\n", count);
         }
     }
 
@@ -75,11 +73,9 @@ void init_pages(int x){
 void init_programs(){
     FILE *fd;
     global_page_count = ceil(MAIN_MEMORY / global_page_size);
-    global_program_count = get_program_count(global_plist);    
-    printf("global program count: %d\n", global_program_count);
+    global_program_count = get_program_count(global_plist);
     global_programs = (t_program*)malloc(sizeof(t_program) * global_program_count);
-
-    printf("Opening file\n");
+    
     fd = fopen(global_plist, "r");
     if(fd == NULL){
         printf("ERROR: file could not be opened");
@@ -199,10 +195,7 @@ int main(int argc, char *argv[]){
     global_ptrace[1] = '/';
     strcpy(global_ptrace+2, ch);
 
-    printf("%s\n%s\n", global_plist, global_ptrace);
-
     //initialize programs
-    printf("Initializing programs...\n");
     init_programs();
 
     for (int i = 0; i < global_program_count; i++){
