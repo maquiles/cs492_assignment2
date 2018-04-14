@@ -17,9 +17,11 @@
 #include "LRU.h"
 #include "CLOCK.h"
 #include "assignment.h"
+#include <math.h>
 
 //function to count the number of programs in a page
 int get_program_count(char* argc){
+    printf("Getting program count...\n");
     int count = 0;
     char ch;
     FILE *fd;
@@ -27,9 +29,11 @@ int get_program_count(char* argc){
     if(fd == NULL){
         printf("ERROR: file could not be opened");
     }
+
     while ((ch = fgetc(fd)) != EOF){
         if(ch == '\n'){
             count++;
+            printf("%d\n", count);
         }
     }
 
@@ -70,10 +74,12 @@ void init_pages(int x){
 
 void init_programs(){
     FILE *fd;
-    global_page_count = MAIN_MEMORY / global_page_size;
-    global_program_count = get_program_count(global_plist);
+    global_page_count = ceil(MAIN_MEMORY / global_page_size);
+    global_program_count = get_program_count(global_plist);    
+    printf("global program count: %d\n", global_program_count);
     global_programs = (t_program*)malloc(sizeof(t_program) * global_program_count);
 
+    printf("Opening file\n");
     fd = fopen(global_plist, "r");
     if(fd == NULL){
         printf("ERROR: file could not be opened");
@@ -150,7 +156,7 @@ void run_programs(){
 }
 
 int main(int argc, char *argv[]){
-    if(argc != 5){
+    if(argc != 6){
         printf("ERROR: not enough parameters");
         return 1;
     }
@@ -159,7 +165,33 @@ int main(int argc, char *argv[]){
 
     global_pageID = 1;
 
+    global_page_size = atoi(argv[3]);
+
+    if (argv[4] = "FIFO") {
+        global_page_alg = 0;
+    } else if (argv[4] = "LRU") {
+        global_page_alg = 1;
+    } else if (argv[4] = "CLOCK") {
+        global_page_alg = 2;
+    } else {
+        printf("Improper page algorithm indicated\n");
+        exit;
+    }
+
+    if (argv[5] = "+") {
+        global_page_flag = 1;
+    } else if (argv[5] = "-") {
+        global_page_flag = 0;
+    } else {
+        printf("Improper flag indicated\n");
+        exit;
+    }
+    // How to initialize?
+    global_plist = argv[1];
+    global_ptrace = argv[2];
+
     //initialize programs
+    printf("Initializing programs...\n");
     init_programs();
 
     for (int i = 0; i < global_program_count; i++){
