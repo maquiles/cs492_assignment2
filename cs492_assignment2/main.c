@@ -172,9 +172,9 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    if (strcmp(argv[4], "+") == 0) {
+    if (strcmp(argv[5], "+") == 0) {
         global_page_flag = PLUS;
-    } else if (strcmp(argv[4], "-") == 0) {
+    } else if (strcmp(argv[5], "-") == 0) {
         global_page_flag = MINUS;
     } else {
         printf("Improper flag indicated\n");
