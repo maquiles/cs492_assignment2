@@ -181,7 +181,7 @@ void prepaging_lru(){
 		count++;
 	}
 
-	printf("Alg: %i \tPaging: %i \tPage Sz: %i \tTot.Rec.: %u \tPgFault: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
+	printf("Alg: %i \tPaging: %i \tPage Size: %i \tPage Swaps: %u \tPage Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
 	fclose(fd);
 }	
 
@@ -192,7 +192,7 @@ void demand_lru(){
 
 	unsigned int count = 0;
 	unsigned int pageFault = 0;
-	//printf("Total record: %i \n", get_instance_count(global_ptrace));
+
 	fd = fopen(global_ptrace, "r");
 	
     if(fd == NULL){
@@ -220,6 +220,6 @@ void demand_lru(){
 		count++;
 	}
 
-	printf("Alg: %i \tPaging: %i \tPage Sz: %i \tTot.Rec.: %u \tPgFault: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
+	printf("Alg: %i \tPaging: %i \tPage Size: %i \tPage Swaps: %u \tPage Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
 	fclose(fd);
 }	

@@ -41,8 +41,7 @@ void* clock_pop(clock_queue* q){
 
     curr = q->head;
 
-    while (curr->r != 0 && curr->next != q->head){ // TODO - is q->head correct? (Originally curr->head, but clock_node struct has no head)
-                                                    // checking that curr->next != q->head seems uneccessary, unless LL is circular?
+    while (curr->r != 0 && curr->next != q->head){
         curr = curr->next;
     }
 
@@ -104,7 +103,7 @@ void prepaging_clock(){
 
 	unsigned int count = 0;
 	unsigned int pageFault = 0;
-	//printf("Total Record: %i \n", get_instance_count(global_ptrace));
+
 	fd = fopen(global_ptrace, "r");
 	
     if(fd == NULL){
@@ -143,7 +142,7 @@ void prepaging_clock(){
 		count++;
 	}
 
-	printf("Alg: %i \tPaging: %i \tPage Sz: %i \tTot.Rec.: %u \tPgFault: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
+	printf("Alg: %i \tPaging: %i \tPage Size: %i \tPage Swaps: %u \tPage Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
 	fclose(fd);
 }	
 
@@ -180,6 +179,6 @@ void demand_clock(){
 		count++;
 	}
 
-	printf("Alg: %i \tPaging: %i \tPage Sz: %i \tTot.Rec.: %u \tPgFault: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
+	printf("Alg: %i \tPaging: %i \tPage Size: %i \tPage Swaps: %u \tPage Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
 	fclose(fd);
 }
