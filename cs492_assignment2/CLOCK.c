@@ -142,7 +142,7 @@ void prepaging_clock(){
 		count++;
 	}
 
-	printf("Alg: %i \tPaging: %i \tPage Size: %i \tPage Swaps: %u \tPage Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
+	printf("Alg: %i \t Paging: %i \t Page Size: %i \t Total Records: %u \t Page Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
 	fclose(fd);
 }	
 
@@ -179,6 +179,6 @@ void demand_clock(){
 		count++;
 	}
 
-	printf("Alg: %i \tPaging: %i \tPage Size: %i \tPage Swaps: %u \tPage Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
+	printf("Alg: %i \t Paging: %i \t Page Size: %i \t Total Records: %u \t Page Faults: %u \n ", global_page_alg, global_page_flag, global_page_size, count, pageFault);
 	fclose(fd);
 }
