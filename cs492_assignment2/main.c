@@ -161,20 +161,20 @@ int main(int argc, char *argv[]){
 
     global_page_size = atoi(argv[3]);
 
-    if (atoi(argv[4]) == FIFO) {
+    if (strcmp(argv[4], "FIFO") == 0) {
         global_page_alg = FIFO;
-    } else if (atoi(argv[4]) == LRU) {
+    } else if (strcmp(argv[4], "LRU") == 0) {
         global_page_alg = LRU;
-    } else if (atoi(argv[4]) == CLOCK) {
+    } else if (strcmp(argv[4], "CLOCK") == 0) {
         global_page_alg = CLOCK;
     } else {
         printf("Improper page algorithm indicated\n");
         return 1;
     }
 
-    if (atoi(argv[5]) == PLUS) {
+    if (strcmp(argv[4], "+") == 0) {
         global_page_flag = PLUS;
-    } else if (atoi(argv[5]) == MINUS) {
+    } else if (strcmp(argv[4], "-") == 0) {
         global_page_flag = MINUS;
     } else {
         printf("Improper flag indicated\n");
