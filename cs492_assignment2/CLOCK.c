@@ -154,7 +154,7 @@ void demand_clock(){
 
 	unsigned int count = 0;
 	unsigned int pageFault = 0;
-	//printf("Total Record: %i \n", get_instance_count(global_ptrace));
+    
 	fd = fopen(global_ptrace, "r");
 
 	if (fd == NULL){

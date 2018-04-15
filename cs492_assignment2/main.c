@@ -157,30 +157,28 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    //std_param_check() to add parameters to global variables
-
     global_pageID = 1;
 
     global_page_size = atoi(argv[3]);
 
-    if (argv[4] = "FIFO") {
-        global_page_alg = 0;
-    } else if (argv[4] = "LRU") {
-        global_page_alg = 1;
-    } else if (argv[4] = "CLOCK") {
-        global_page_alg = 2;
+    if (atoi(argv[4]) == FIFO) {
+        global_page_alg = FIFO;
+    } else if (atoi(argv[4]) == LRU) {
+        global_page_alg = LRU;
+    } else if (atoi(argv[4]) == CLOCK) {
+        global_page_alg = CLOCK;
     } else {
         printf("Improper page algorithm indicated\n");
-        exit;
+        return 1;
     }
 
-    if (argv[5] = "+") {
-        global_page_flag = 1;
-    } else if (argv[5] = "-") {
-        global_page_flag = 0;
+    if (atoi(argv[5]) == PLUS) {
+        global_page_flag = PLUS;
+    } else if (atoi(argv[5]) == MINUS) {
+        global_page_flag = MINUS;
     } else {
         printf("Improper flag indicated\n");
-        exit;
+        return 1;
     }
 
     char* ch = argv[1];

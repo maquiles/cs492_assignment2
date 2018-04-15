@@ -67,7 +67,6 @@ void prepaging_fifo(){
 
     unsigned int count = 0;
     unsigned int pageFault = 0;
-    //printf("total record: %i \n", get_instance_count(global_ptrace));
     
     fd = fopen(global_ptrace, "r");
 
