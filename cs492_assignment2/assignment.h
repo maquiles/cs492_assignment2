@@ -17,11 +17,14 @@
 #define TRUE 1
 #define POWER 5
 
+//algorithms
 #define FIFO 0
 #define LRU 1
 #define CLOCK 2
-#define PLUS 1
-#define MINUS 0
+
+//paging type
+#define PLUS 1  //pre-paging
+#define MINUS 0 //demand
 
 #define MAIN_MEMORY 512	
     
@@ -46,12 +49,12 @@ typedef struct s_program{
 } 	t_program;
 
 //global variables
-char *global_plist;
-char *global_ptrace;
-int global_page_size;
-algorithms global_page_alg;
-bool global_page_flag;
-t_program *global_programs;
-int global_page_count;
-int global_program_count;
-int global_pageID;
+char *global_plist;         
+char *global_ptrace;        
+int global_page_size;       
+algorithms global_page_alg; //alorithm to use (fifo, lru, clock)
+bool global_page_flag;      //flag +/- flag for paging
+t_program *global_programs; 
+int global_page_count;      
+int global_program_count;   
+int global_pageID;          
