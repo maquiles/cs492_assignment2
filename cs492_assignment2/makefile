@@ -5,10 +5,10 @@ OBJ=$(addprefix $(SRCPATH), $(SRC: .c=.o))
 
 RM=rm -f
 INCPATH=includes
-CPPFLAGS += -I $(INCPATH)
+CFLAGS += -std=c99 -I $(INCPATH)
 
 all: $(OBJ)
-	gcc $(OBJ) -o $(NAME)
+	gcc -std=c99 $(OBJ) -o $(NAME)
 
 clean:
 	-$(RM) *~

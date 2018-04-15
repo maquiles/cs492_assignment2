@@ -29,8 +29,6 @@
 typedef int algorithms;
 typedef int bool;
 
-struct timeval tvbegin;
-
 typedef struct s_page{
     int pagenumber;
     bool validbid;

@@ -36,7 +36,7 @@ int get_program_count(char* argc){
     }
 
     fclose(fd);
-    return count;
+    return count-1;
 }
 
 void init_pages(int x){
@@ -72,7 +72,7 @@ void init_pages(int x){
 
 void init_programs(){
     FILE *fd;
-    global_page_count = ceil(MAIN_MEMORY / global_page_size);
+    global_page_count = MAIN_MEMORY / global_page_size;
     global_program_count = get_program_count(global_plist);
     global_programs = (t_program*)malloc(sizeof(t_program) * global_program_count);
     
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]){
     }
 
     global_pageID = 1;
-
+ 
     global_page_size = atoi(argv[3]);
 
     if (strcmp(argv[4], "FIFO") == 0) {
@@ -196,6 +196,7 @@ int main(int argc, char *argv[]){
     //initialize programs
     init_programs();
 
+    printf("%i", global_program_count);
     for (int i = 0; i < global_program_count; i++){
         printf("pid: %i \t initML: %i \t totalML: %i \t totalPages: %i \t P#: %i \t Flag: %i \n",\
             global_programs[i].pid,\
